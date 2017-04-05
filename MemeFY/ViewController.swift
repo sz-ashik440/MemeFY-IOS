@@ -8,18 +8,34 @@
 
 import UIKit
 
-class ViewController: UIViewController {
-
+class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    //MARK: Properties
+    @IBOutlet weak var memeImage: UIImageView!
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    
+    // MARK: ImagePicker Delegate
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        guard let selectedImage = info[UIImagePickerControllerOriginalImage] as? UIImage else {
+            fatalError("Expected a dictionary containing an image: \(info)")
+        }
+        
+        memeImage.image = selectedImage
+        dismiss(animated: true, completion: nil)
     }
-
-
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    // MARK: Actions
+    @IBAction func pickAction(_ sender: UIBarButtonItem) {
+        
+        let controller = UIImagePickerController()
+        controller.delegate = self
+        self.present(controller, animated: true, completion: nil)
+    }
 }
 
